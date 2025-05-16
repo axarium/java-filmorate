@@ -1,11 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.util.IdGenerator;
+import ru.yandex.practicum.filmorate.validator.OnCreate;
+import ru.yandex.practicum.filmorate.validator.OnUpdate;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
+    public User createUser(@Validated(OnCreate.class) @RequestBody User user) {
         log.info("Process POST /users request with user {}", user);
 
         updateUserName(user);
@@ -38,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody @Valid User user) {
+    public User updateUser(@Validated(OnUpdate.class) @RequestBody User user) {
         log.info("Process PUT /users request with user {}", user);
 
         if (!users.containsKey(user.getId())) {

@@ -24,7 +24,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 14));
         film.setDuration(100);
 
-        var response = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -43,7 +43,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 14));
         film.setDuration(100);
 
-        var response = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -57,7 +57,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 14));
         film.setDuration(100);
 
-        var response = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -71,7 +71,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(1890, 1, 1));
         film.setDuration(100);
 
-        var response = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -85,7 +85,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 14));
         film.setDuration(-100);
 
-        var response = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -99,7 +99,7 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 14));
         film.setDuration(100);
 
-        var createResponse = restTemplate.postForEntity("/films", film, Film.class);
+        ResponseEntity<Film> createResponse = restTemplate.postForEntity("/films", film, Film.class);
 
         assertNotNull(createResponse.getBody());
 
@@ -109,11 +109,16 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 12, 14));
         film.setDuration(200);
 
-        var headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        var requestEntity = new HttpEntity<>(film, headers);
+        HttpEntity<Film> requestEntity = new HttpEntity<>(film, headers);
 
-        var updateResponse = restTemplate.exchange("/films", HttpMethod.PUT, requestEntity, Film.class);
+        ResponseEntity<Film> updateResponse = restTemplate.exchange(
+                "/films",
+                HttpMethod.PUT,
+                requestEntity,
+                Film.class
+        );
 
         assertEquals(HttpStatus.OK, updateResponse.getStatusCode());
         assertNotNull(updateResponse.getBody());
@@ -133,11 +138,11 @@ public class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 14));
         film.setDuration(100);
 
-        var headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        var requestEntity = new HttpEntity<>(film, headers);
+        HttpEntity<Film> requestEntity = new HttpEntity<>(film, headers);
 
-        var response = restTemplate.exchange("/films", HttpMethod.PUT, requestEntity, Film.class);
+        ResponseEntity<Film> response = restTemplate.exchange("/films", HttpMethod.PUT, requestEntity, Film.class);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -153,7 +158,7 @@ public class FilmControllerTest {
 
         restTemplate.postForEntity("/films", film, Film.class);
 
-        var response = restTemplate.getForEntity("/films", Film[].class);
+        ResponseEntity<Film[]> response = restTemplate.getForEntity("/films", Film[].class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

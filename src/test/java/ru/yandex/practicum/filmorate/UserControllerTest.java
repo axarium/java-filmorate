@@ -25,7 +25,7 @@ public class UserControllerTest {
         user.setEmail("email@email.ru");
         user.setBirthday(LocalDate.of(2001, 1, 14));
 
-        var response = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -44,7 +44,7 @@ public class UserControllerTest {
         user.setEmail("email@email.ru");
         user.setBirthday(LocalDate.of(2001, 1, 14));
 
-        var response = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -58,7 +58,7 @@ public class UserControllerTest {
         user.setEmail("email.ru");
         user.setBirthday(LocalDate.of(2001, 1, 14));
 
-        var response = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -72,7 +72,7 @@ public class UserControllerTest {
         user.setEmail("email@email.ru");
         user.setBirthday(LocalDate.of(2026, 1, 14));
 
-        var response = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -86,7 +86,7 @@ public class UserControllerTest {
         user.setEmail("email@email.ru");
         user.setBirthday(LocalDate.of(2001, 1, 14));
 
-        var response = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -105,7 +105,7 @@ public class UserControllerTest {
         user.setEmail("email@email.ru");
         user.setBirthday(LocalDate.of(2001, 1, 14));
 
-        var createResponse = restTemplate.postForEntity("/users", user, User.class);
+        ResponseEntity<User> createResponse = restTemplate.postForEntity("/users", user, User.class);
 
         assertNotNull(createResponse.getBody());
 
@@ -115,11 +115,16 @@ public class UserControllerTest {
         user.setEmail("NewEmail@email.ru");
         user.setBirthday(LocalDate.of(2001, 12, 14));
 
-        var headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        var requestEntity = new HttpEntity<>(user, headers);
+        HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
 
-        var updateResponse = restTemplate.exchange("/users", HttpMethod.PUT, requestEntity, User.class);
+        ResponseEntity<User> updateResponse = restTemplate.exchange(
+                "/users",
+                HttpMethod.PUT,
+                requestEntity,
+                User.class
+        );
 
         assertEquals(HttpStatus.OK, updateResponse.getStatusCode());
         assertNotNull(updateResponse.getBody());
@@ -139,11 +144,11 @@ public class UserControllerTest {
         user.setEmail("email@email.ru");
         user.setBirthday(LocalDate.of(2001, 1, 14));
 
-        var headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        var requestEntity = new HttpEntity<>(user, headers);
+        HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
 
-        var response = restTemplate.exchange("/users", HttpMethod.PUT, requestEntity, User.class);
+        ResponseEntity<User> response = restTemplate.exchange("/users", HttpMethod.PUT, requestEntity, User.class);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -159,7 +164,7 @@ public class UserControllerTest {
 
         restTemplate.postForEntity("/users", user, User.class);
 
-        var response = restTemplate.getForEntity("/users", User[].class);
+        ResponseEntity<User[]> response = restTemplate.getForEntity("/users", User[].class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
