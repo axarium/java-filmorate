@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,6 +20,12 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNotFound(MethodArgumentNotValidException exception) {
-        return new ErrorResponse("Невалидные поля: " + exception.getBindingResult().getFieldErrors());
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
+            stringBuilder.append(fieldError.getField());
+        }
+
+        return new ErrorResponse("Невалидные поля: " + stringBuilder);
     }
 }
