@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
+import java.util.stream.Collectors;
+
 @RestControllerAdvice
 public class ErrorHandler {
 
@@ -20,12 +22,11 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNotFound(MethodArgumentNotValidException exception) {
-        StringBuilder stringBuilder = new StringBuilder();
+        String invalidFields = exception.getBindingResult().getFieldErrors()
+                .stream()
+                .map(FieldError::getField)
+                .collect(Collectors.joining(", "));
 
-        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
-            stringBuilder.append(fieldError.getField());
-        }
-
-        return new ErrorResponse("Невалидные поля: " + stringBuilder);
+        return new ErrorResponse("Невалидные поля: " + invalidFields);
     }
 }
