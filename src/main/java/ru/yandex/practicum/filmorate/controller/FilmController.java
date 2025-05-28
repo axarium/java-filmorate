@@ -1,53 +1,66 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.validator.OnCreate;
 import ru.yandex.practicum.filmorate.validator.OnUpdate;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
+@RequiredArgsConstructor
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final Map<Long, Film> films = new HashMap<>();
-    private long filmsCount = 0;
+    private final static String DEFAULT_VALUE_FOR_COUNT_REQUEST_PARAM = "10";
+    private final FilmService filmService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Collection<Film> getAllFilms() {
-        log.info("Process GET /films request");
+        return filmService.getAllFilms();
+    }
 
-        return films.values();
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Film getFilmById(@PathVariable Long id) {
+        return filmService.getFilmById(id);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Film createFilm(@Validated(OnCreate.class) @RequestBody Film film) {
-        log.info("Process POST /films request with film {}", film);
-
-        filmsCount = IdGenerator.generateId(filmsCount);
-        film.setId(filmsCount);
-        films.put(film.getId(), film);
-
-        return film;
+        return filmService.createFilm(film);
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.OK)
     public Film updateFilm(@Validated(OnUpdate.class) @RequestBody Film film) {
-        log.info("Process PUT /films request with film {}", film);
+        return filmService.updateFilm(film);
+    }
 
-        if (!films.containsKey(film.getId())) {
-            throw new NotFoundException("Фильм не найден.");
-        }
+    @PutMapping("/{id}/like/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Film addLike(@PathVariable Long id, @PathVariable Long userId) {
+        return filmService.addLike(id, userId);
+    }
 
-        films.put(film.getId(), film);
+    @DeleteMapping("/{id}/like/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.deleteLike(id, userId);
+    }
 
-        return film;
+    @GetMapping("/popular")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Film> getMostPopularFilms(
+            @RequestParam(defaultValue = DEFAULT_VALUE_FOR_COUNT_REQUEST_PARAM) Integer count
+    ) {
+        return filmService.getMostPopularFilms(count);
     }
 }

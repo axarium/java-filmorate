@@ -9,11 +9,14 @@ import ru.yandex.practicum.filmorate.validator.OnCreate;
 import ru.yandex.practicum.filmorate.validator.OnUpdate;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class Film {
     private static final int MAX_DESCRIPTION_LENGTH = 200;
 
+    @Positive(message = "id должно быть положительным числом", groups = OnUpdate.class)
     private Long id;
     @NotBlank(message = "Название не может быть пустым.", groups = {OnCreate.class, OnUpdate.class})
     private String name;
@@ -30,4 +33,6 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность должна быть положительной.", groups = {OnCreate.class, OnUpdate.class})
     private Integer duration;
+
+    private final Set<Long> usersIdsWhoLikes = new HashSet<>();
 }

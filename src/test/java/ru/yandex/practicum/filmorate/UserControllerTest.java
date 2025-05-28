@@ -27,7 +27,7 @@ public class UserControllerTest {
 
         ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getId());
         assertEquals(user.getName(), response.getBody().getName());
@@ -88,7 +88,7 @@ public class UserControllerTest {
 
         ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getId());
         assertEquals(user.getLogin(), response.getBody().getName());
@@ -150,7 +150,7 @@ public class UserControllerTest {
 
         ResponseEntity<User> response = restTemplate.exchange("/users", HttpMethod.PUT, requestEntity, User.class);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
     }
 
