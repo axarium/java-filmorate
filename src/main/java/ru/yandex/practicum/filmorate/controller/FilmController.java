@@ -17,7 +17,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final static String DEFAULT_VALUE_FOR_COUNT_REQUEST_PARAM = "10";
+    private static final String DEFAULT_VALUE_FOR_COUNT_REQUEST_PARAM = "10";
     private final FilmService filmService;
 
     @GetMapping
