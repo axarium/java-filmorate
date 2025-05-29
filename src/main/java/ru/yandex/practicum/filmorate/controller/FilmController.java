@@ -17,7 +17,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private static final String DEFAULT_VALUE_FOR_COUNT_REQUEST_PARAM = "10";
+    private static final String COUNT_PARAM_DEFAULT_VALUE = "10";
     private final FilmService filmService;
 
     @GetMapping
@@ -59,7 +59,7 @@ public class FilmController {
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
     public Collection<Film> getMostPopularFilms(
-            @RequestParam(defaultValue = DEFAULT_VALUE_FOR_COUNT_REQUEST_PARAM) Integer count
+            @RequestParam(defaultValue = COUNT_PARAM_DEFAULT_VALUE) Integer count
     ) {
         return filmService.getMostPopularFilms(count);
     }

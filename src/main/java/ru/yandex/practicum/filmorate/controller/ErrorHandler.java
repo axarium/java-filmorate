@@ -21,12 +21,18 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleNotFound(MethodArgumentNotValidException exception) {
+    public ErrorResponse handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
         String invalidFields = exception.getBindingResult().getFieldErrors()
                 .stream()
                 .map(FieldError::getField)
                 .collect(Collectors.joining(", "));
 
         return new ErrorResponse("Невалидные поля: " + invalidFields);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleError(Throwable exception) {
+        return new ErrorResponse("Произошла непредвиденная ошибка.");
     }
 }
