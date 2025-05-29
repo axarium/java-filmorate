@@ -6,11 +6,14 @@ import ru.yandex.practicum.filmorate.validator.OnCreate;
 import ru.yandex.practicum.filmorate.validator.OnUpdate;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class User {
     private static final String REGEXP_FOR_LOGIN = "\\S+";
 
+    @Positive(message = "id должно быть положительным числом", groups = OnUpdate.class)
     private Long id;
     @NotBlank(message = "Email не может быть пустым.", groups = {OnCreate.class, OnUpdate.class})
     @Email(message = "Email не соответствует формату.", groups = {OnCreate.class, OnUpdate.class})
@@ -25,4 +28,6 @@ public class User {
     private String name;
     @PastOrPresent(message = "День рождения не может быть в будущем.", groups = {OnCreate.class, OnUpdate.class})
     private LocalDate birthday;
+
+    private final Set<Long> friendsIds = new HashSet<>();
 }

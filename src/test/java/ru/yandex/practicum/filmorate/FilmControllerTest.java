@@ -26,7 +26,7 @@ public class FilmControllerTest {
 
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getId());
         assertEquals(film.getName(), response.getBody().getName());
@@ -144,7 +144,7 @@ public class FilmControllerTest {
 
         ResponseEntity<Film> response = restTemplate.exchange("/films", HttpMethod.PUT, requestEntity, Film.class);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
     }
 
