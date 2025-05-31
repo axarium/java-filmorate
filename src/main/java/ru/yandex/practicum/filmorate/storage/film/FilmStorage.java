@@ -12,6 +12,6 @@ public interface FilmStorage {
     Optional<Film> getFilmById(Long id);
 
     Film createFilm(Film film);
-
+    // Тест
     Film updateFilm(Film film);
 }

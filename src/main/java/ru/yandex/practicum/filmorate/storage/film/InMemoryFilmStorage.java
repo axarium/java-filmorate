@@ -23,7 +23,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Optional<Film> getFilmById(Long id) {
         return Optional.ofNullable(films.get(id));
     }
-
+    // Тест
     @Override
     public Film createFilm(Film film) {
         filmsCount = IdGenerator.generateId(filmsCount);

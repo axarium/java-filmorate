@@ -17,4 +17,4 @@ public class FilmDateValidator implements ConstraintValidator<FilmDate, LocalDat
 
         return value.isAfter(MIN_FILM_DATE);
     }
-}
+}// Тест

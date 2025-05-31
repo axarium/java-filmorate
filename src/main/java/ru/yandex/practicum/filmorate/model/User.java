@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.validator.OnUpdate;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
+// Тест
 @Data
 public class User {
     private static final String REGEXP_FOR_LOGIN = "\\S+";
