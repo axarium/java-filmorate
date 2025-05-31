@@ -31,7 +31,7 @@ public class FilmController {
         Film updatedFilm = filmService.updateFilm(film);
         return ResponseEntity.ok(updatedFilm);
 
-    }
+    } // Комментарий
 
     @GetMapping
     public ResponseEntity<Collection<Film>> getAllFilms() {
