@@ -17,7 +17,7 @@ public class ErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.warn("Поймано исключение {}", e);
+        log.warn("Поймано исключение {}", e); // Комментарий
         return new ErrorResponse("error", e.getMessage());
     }
 

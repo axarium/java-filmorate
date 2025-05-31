@@ -118,7 +118,7 @@ public class UserService {
         log.debug("Пользователи найдены: {} и {}", userId, otherId);
 
         Set<Long> commonIds = new HashSet<>(user.getFriends());
-        commonIds.retainAll(other.getFriends());
+        commonIds.retainAll(other.getFriends()); // Комментарий
 
         log.debug("Количество общих друзей: {}", commonIds.size());
 

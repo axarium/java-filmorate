@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Set;
 
 @Slf4j
-@RestController
+@RestController // Комментарий
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {

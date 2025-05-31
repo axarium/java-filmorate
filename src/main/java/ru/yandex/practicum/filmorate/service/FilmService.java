@@ -24,7 +24,7 @@ public class FilmService {
     public Film addFilm(Film film) {
         log.debug("Попытка добавить фильм: {}", film);
         validate(film);
-        return filmStorage.save(film);
+        return filmStorage.save(film); // Комментарий
     }
 
     public Film updateFilm(Film film) {

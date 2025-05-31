@@ -36,7 +36,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Collection<Film> getAllFilms() {
         log.debug("Попытка вызвать список всех фильмов");
         return films.values();
-    }
+    } // Комментарий
 
     @Override
     public Optional<Film> findFilmById(Long id) {

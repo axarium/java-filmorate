@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface UserStorage {
-    public void save(User user);
+    public void save(User user); // Комментарий
 
     public User update(User user);
 

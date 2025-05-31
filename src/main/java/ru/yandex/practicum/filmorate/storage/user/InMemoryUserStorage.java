@@ -18,7 +18,7 @@ public class InMemoryUserStorage implements UserStorage {
         user.setId(generateId());
         users.put(user.getId(), user);
         log.debug("Пользователь с id={} успешно создан", user.getId());
-    }
+    } // Комментарий
 
     @Override
     public User update(User user) {

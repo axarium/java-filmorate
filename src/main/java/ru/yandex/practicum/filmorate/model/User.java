@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 public class User {
 
-    private Long id;
+    private Long id; // Комментарий
 
     @NotBlank(message = "Электронная почта не может быть пустой")
     @Email(message = "Некорректный формат электронной почты")

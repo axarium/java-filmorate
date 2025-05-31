@@ -8,7 +8,7 @@ public class ErrorResponse {
 
     public ErrorResponse(String error, String description) {
         this.error = error;
-        this.description = description;
+        this.description = description; // Комментарий
     }
 
     public String getError() {
