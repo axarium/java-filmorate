@@ -1,42 +1,53 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.util.IdGenerator;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+@Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
+
     private final Map<Long, User> users = new HashMap<>();
-    private long usersCount = 0;
+
+    @Override
+    public void save(User user) {
+        log.debug("Попытка сохранить пользователя с id {}", user.getId());
+        user.setId(generateId());
+        users.put(user.getId(), user);
+        log.debug("Пользователь с id={} успешно создан", user.getId());
+    }
+
+    @Override
+    public User update(User user) {
+        users.put(user.getId(), user);
+        return user;
+    }
 
     @Override
     public Collection<User> getAllUsers() {
+        log.debug("Попытка вызвать список всех пользователей");
         return users.values();
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable(users.get(id)); // Комментарий
+    public Optional<User> findById(Long id) {
+        log.debug("Попытка найти пользователя с id={}", id);
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override
-    public User createUser(User user) {
-        usersCount = IdGenerator.generateId(usersCount);
-        user.setId(usersCount);
-        users.put(user.getId(), user);
-
-        return user;
+    public void deleteById(Long id) {
+        log.debug("Попытка удалить пользователя с id={}", id);
+        users.remove(id);
     }
 
-    @Override
-    public User updateUser(User user) {
-        users.put(user.getId(), user);
-
-        return user;
+    private long generateId() {
+        log.debug("Попытка сгенерировать ID");
+        long maxId = users.keySet().stream().mapToLong(id -> id).max().orElse(0);
+        log.debug("Сгенерировано ID  пользователя {}", maxId);
+        return ++maxId;
     }
 }

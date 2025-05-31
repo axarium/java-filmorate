@@ -6,12 +6,14 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface UserStorage {
+    public void save(User user);
 
-    Collection<User> getAllUsers();
+    public User update(User user);
 
-    Optional<User> getUserById(Long id);
+    public Collection<User> getAllUsers();
 
-    User createUser(User user);
+    public Optional<User> findById(Long id);
 
-    User updateUser(User user);
+    public void deleteById(Long id);
+
 }
