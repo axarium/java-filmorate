@@ -18,7 +18,7 @@ public class InMemoryUserStorage implements UserStorage {
     public Collection<User> getAllUsers() {
         return users.values();
     }
-    // Тест
+
     @Override
     public Optional<User> getUserById(Long id) {
         return Optional.ofNullable(users.get(id));

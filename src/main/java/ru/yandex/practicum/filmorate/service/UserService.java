@@ -43,7 +43,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Пользователь для добавления в друзья не найден."));
         user.getFriendsIds().add(friendId);
         friend.getFriendsIds().add(id);
-// Тест
+
         return user;
     }
 

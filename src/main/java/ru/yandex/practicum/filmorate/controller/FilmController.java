@@ -31,7 +31,7 @@ public class FilmController {
     public Film getFilmById(@PathVariable Long id) {
         return filmService.getFilmById(id);
     }
-    // Тест
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Film createFilm(@Validated(OnCreate.class) @RequestBody Film film) {

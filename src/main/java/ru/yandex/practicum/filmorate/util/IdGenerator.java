@@ -5,4 +5,4 @@ public class IdGenerator {
     public static long generateId(long currentId) {
         return ++currentId;
     }
-}// Тест
+}

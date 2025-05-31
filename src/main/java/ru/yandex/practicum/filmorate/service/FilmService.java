@@ -15,7 +15,7 @@ import java.util.Comparator;
 public class FilmService {
     private final FilmStorage filmStorage;
     private final UserService userService;
-    // Тест
+
     public Collection<Film> getAllFilms() {
         return filmStorage.getAllFilms();
     }

@@ -18,7 +18,7 @@ import java.util.Collection;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    // Тест
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<User> getAllUsers() {
