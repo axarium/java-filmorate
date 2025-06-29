@@ -19,16 +19,14 @@ public class UserService {
     public Collection<User> getAllUsers() {
         Collection<User> users = userStorage.getAllUsers();
 
-        for (User user : users) {
-            user.getFriendsIds().addAll(friendshipStorage.getFriendsIdsByUserId(user.getId()));
-        }
+        addFriendsInUsers(users);
 
         return users;
     }
 
     public User getUserById(Long id) {
         User user = userStorage.getUserById(id).orElseThrow(() -> new NotFoundException("Пользователь не найден."));
-        user.getFriendsIds().addAll(friendshipStorage.getFriendsIdsByUserId(user.getId()));
+        addFriendsInUser(user);
         return user;
     }
 
@@ -39,7 +37,7 @@ public class UserService {
 
     public User updateUser(User user) {
         updateUserName(user);
-        user.getFriendsIds().addAll(friendshipStorage.getFriendsIdsByUserId(user.getId()));
+        addFriendsInUser(user);
         return userStorage.updateUser(user);
     }
 
@@ -56,7 +54,7 @@ public class UserService {
             friendshipStorage.addFriendship(user.getId(), friend.getId(), FriendshipStorage.PENDING);
         }
 
-        user.getFriendsIds().addAll(friendshipStorage.getFriendsIdsByUserId(user.getId()));
+        addFriendsInUser(user);
 
         return user;
     }
@@ -84,9 +82,7 @@ public class UserService {
                 .map(Optional::get)
                 .toList();
 
-        for (User friend : friends) {
-            friend.getFriendsIds().addAll(friendshipStorage.getFriendsIdsByUserId(friend.getId()));
-        }
+        addFriendsInUsers(friends);
 
         return friends;
     }
@@ -107,11 +103,23 @@ public class UserService {
                 .map(Optional::get)
                 .toList();
 
-        for (User friend : commonFriends) {
-            friend.getFriendsIds().addAll(friendshipStorage.getFriendsIdsByUserId(friend.getId()));
-        }
+        addFriendsInUsers(commonFriends);
 
         return commonFriends;
+    }
+
+    private void addFriendsInUser(User user) {
+        user.getFriendsIds().addAll(friendshipStorage.getFriendsIdsByUserId(user.getId()));
+    }
+
+    private void addFriendsInUsers(Collection<User> users) {
+        Map<Long, Set<Long>> friendsMap = friendshipStorage.getFriendsIdsByUsersIds(
+                users.stream().map(User::getId).toList()
+        );
+
+        for (User user : users) {
+            user.getFriendsIds().addAll(friendsMap.getOrDefault(user.getId(), Set.of()));
+        }
     }
 
     private void updateUserName(User user) {

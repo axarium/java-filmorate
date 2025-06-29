@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class MpaMapper implements RowMapper<Mpa> {
+public class MpaRowMapper implements RowMapper<Mpa> {
 
     @Override
     public Mpa mapRow(ResultSet resultSet, int rowNum) throws SQLException {

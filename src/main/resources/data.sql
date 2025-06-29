@@ -1,15 +1,15 @@
-INSERT INTO genre (name) VALUES ('Комедия') ON CONFLICT DO NOTHING;
-INSERT INTO genre (name) VALUES ('Драма') ON CONFLICT DO NOTHING;
-INSERT INTO genre (name) VALUES ('Мультфильм') ON CONFLICT DO NOTHING;
-INSERT INTO genre (name) VALUES ('Триллер') ON CONFLICT DO NOTHING;
-INSERT INTO genre (name) VALUES ('Документальный') ON CONFLICT DO NOTHING;
-INSERT INTO genre (name) VALUES ('Боевик') ON CONFLICT DO NOTHING;
+MERGE INTO genre (name) KEY(name) VALUES ('Комедия');
+MERGE INTO genre (name) KEY(name) VALUES ('Драма');
+MERGE INTO genre (name) KEY(name) VALUES ('Мультфильм');
+MERGE INTO genre (name) KEY(name) VALUES ('Триллер');
+MERGE INTO genre (name) KEY(name) VALUES ('Документальный');
+MERGE INTO genre (name) KEY(name) VALUES ('Боевик');
 
-INSERT INTO mpa (name) VALUES ('G') ON CONFLICT DO NOTHING;
-INSERT INTO mpa (name) VALUES ('PG') ON CONFLICT DO NOTHING;
-INSERT INTO mpa (name) VALUES ('PG-13') ON CONFLICT DO NOTHING;
-INSERT INTO mpa (name) VALUES ('R') ON CONFLICT DO NOTHING;
-INSERT INTO mpa (name) VALUES ('NC-17') ON CONFLICT DO NOTHING;
+MERGE INTO mpa (name) KEY(name) VALUES ('G');
+MERGE INTO mpa (name) KEY(name) VALUES ('PG');
+MERGE INTO mpa (name) KEY(name) VALUES ('PG-13');
+MERGE INTO mpa (name) KEY(name) VALUES ('R');
+MERGE INTO mpa (name) KEY(name) VALUES ('NC-17');
 
-INSERT INTO friendship_status (name) VALUES ('Запрос отправлен') ON CONFLICT DO NOTHING;
-INSERT INTO friendship_status (name) VALUES ('Подтверждена') ON CONFLICT DO NOTHING;
+MERGE INTO friendship_status (name) KEY(name) VALUES ('Запрос отправлен');
+MERGE INTO friendship_status (name) KEY(name) VALUES ('Подтверждена');

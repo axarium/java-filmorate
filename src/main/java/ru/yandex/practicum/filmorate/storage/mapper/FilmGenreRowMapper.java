@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class FilmGenreMapper implements RowMapper<FilmGenre> {
+public class FilmGenreRowMapper implements RowMapper<FilmGenre> {
 
     @Override
     public FilmGenre mapRow(ResultSet resultSet, int rowNum) throws SQLException {

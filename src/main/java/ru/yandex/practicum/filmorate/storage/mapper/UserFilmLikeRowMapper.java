@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class UserFilmLikeMapper implements RowMapper<UserFilmLike> {
+public class UserFilmLikeRowMapper implements RowMapper<UserFilmLike> {
 
     @Override
     public UserFilmLike mapRow(ResultSet resultSet, int rowNum) throws SQLException {

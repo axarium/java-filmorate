@@ -3,16 +3,13 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.FilmGenre;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film_genre.FilmGenreStorage;
 import ru.yandex.practicum.filmorate.storage.user_film_like.UserFilmLikeStorage;
 
-import java.util.Collection;
-import java.util.Comparator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -27,11 +24,9 @@ public class FilmService {
     public Collection<Film> getAllFilms() {
         Collection<Film> films = filmStorage.getAllFilms();
 
-        for (Film film : films) {
-            addMpaInFilm(film);
-            addUsersLikesInFilm(film);
-            addGenresInFilm(film);
-        }
+        addMpaInFilms(films);
+        addLikesInFilms(films);
+        addGenresInFilms(films);
 
         return films;
     }
@@ -40,7 +35,7 @@ public class FilmService {
         Film film = filmStorage.getFilmById(id).orElseThrow(() -> new NotFoundException("Фильм не найден."));
 
         addMpaInFilm(film);
-        addUsersLikesInFilm(film);
+        addLikesInFilm(film);
         addGenresInFilm(film);
 
         return film;
@@ -52,7 +47,7 @@ public class FilmService {
 
         film = filmStorage.createFilm(film);
 
-        addGenres(film);
+        addFilmGenres(film);
         addMpaInFilm(film);
         addGenresInFilm(film);
 
@@ -60,7 +55,7 @@ public class FilmService {
     }
 
     public Film updateFilm(Film film) {
-        addUsersLikesInFilm(film);
+        addLikesInFilm(film);
         addMpaInFilm(film);
         addGenresInFilm(film);
 
@@ -72,7 +67,7 @@ public class FilmService {
         User user = userService.getUserById(userId);
 
         userFilmLikeStorage.addLike(user.getId(), film.getId());
-        addUsersLikesInFilm(film);
+        addLikesInFilm(film);
         addMpaInFilm(film);
         addGenresInFilm(film);
 
@@ -94,8 +89,19 @@ public class FilmService {
                 .toList();
     }
 
-    private void addUsersLikesInFilm(Film film) {
-        film.getUsersIdsWhoLikes().addAll(userFilmLikeStorage.getUsersIdsByFilmId(film.getId()));
+    private void addLikesInFilm(Film film) {
+        film.getUsersIdsWhoLikes().addAll(userFilmLikeStorage.getLikesByFilmId(film.getId()));
+    }
+
+    private void addLikesInFilms(Collection<Film> films) {
+        Collection<Long> filmsIds = films.stream().map(Film::getId).collect(Collectors.toList());
+        Map<Long, Set<Long>> filmsLikesMap = userFilmLikeStorage.getLikesByFilmsIds(filmsIds);
+
+        for (Film film : films) {
+            Set<Long> usersWhoLikes = filmsLikesMap.getOrDefault(film.getId(), new HashSet<>());
+            film.getUsersIdsWhoLikes().clear();
+            film.getUsersIdsWhoLikes().addAll(usersWhoLikes);
+        }
     }
 
     private void addGenresInFilm(Film film) {
@@ -109,9 +115,34 @@ public class FilmService {
         }
     }
 
+    private void addGenresInFilms(Collection<Film> films) {
+        Map<Long, Collection<Genre>> genresMap = filmGenreStorage.getGenresByFilmsIds(
+                films.stream().map(Film::getId).toList()
+        );
+
+        for (Film film : films) {
+            film.getGenres().clear();
+            Collection<Genre> genres = genresMap.getOrDefault(film.getId(), List.of());
+            film.getGenres().addAll(genres);
+        }
+    }
+
     private void addMpaInFilm(Film film) {
         if (film.getMpa() != null) {
             film.setMpa(mpaService.getMpaById(film.getMpa().getId()));
+        }
+    }
+
+    private void addMpaInFilms(Collection<Film> films) {
+        Collection<Mpa> allMpa = mpaService.getAllMpa();
+        Map<Long, Mpa> mpaMap = allMpa.stream().collect(Collectors.toMap(Mpa::getId, mpa -> mpa));
+
+        for (Film film : films) {
+            Mpa mpa = mpaMap.get(film.getMpa().getId());
+
+            if (mpa != null) {
+                film.setMpa(mpa);
+            }
         }
     }
 
@@ -137,7 +168,7 @@ public class FilmService {
         }
     }
 
-    private void addGenres(Film film) {
+    private void addFilmGenres(Film film) {
         Collection<Genre> genres = film.getGenres();
 
         for (Genre genre : genres) {
