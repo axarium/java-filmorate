@@ -2,14 +2,14 @@ package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.validator.OnCreate;
 import ru.yandex.practicum.filmorate.validator.OnUpdate;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
+@EqualsAndHashCode(of = {"id"})
 public class User {
     private static final String REGEXP_FOR_LOGIN = "\\S+";
 
@@ -28,6 +28,4 @@ public class User {
     private String name;
     @PastOrPresent(message = "День рождения не может быть в будущем.", groups = {OnCreate.class, OnUpdate.class})
     private LocalDate birthday;
-
-    private final Set<Long> friendsIds = new HashSet<>();
 }

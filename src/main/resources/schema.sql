@@ -8,11 +8,6 @@ CREATE TABLE IF NOT EXISTS genre (
     name TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS friendship_status (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS app_user (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     email TEXT NOT NULL,
@@ -45,6 +40,5 @@ CREATE TABLE IF NOT EXISTS film_genre (
 CREATE TABLE IF NOT EXISTS friendship (
     user_id BIGINT NOT NULL REFERENCES app_user(id),
     friend_id BIGINT NOT NULL REFERENCES app_user(id),
-    friendship_status_id BIGINT NOT NULL REFERENCES friendship_status(id),
     PRIMARY KEY (user_id, friend_id)
 );

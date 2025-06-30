@@ -10,6 +10,3 @@ MERGE INTO mpa (name) KEY(name) VALUES ('PG');
 MERGE INTO mpa (name) KEY(name) VALUES ('PG-13');
 MERGE INTO mpa (name) KEY(name) VALUES ('R');
 MERGE INTO mpa (name) KEY(name) VALUES ('NC-17');
-
-MERGE INTO friendship_status (name) KEY(name) VALUES ('Запрос отправлен');
-MERGE INTO friendship_status (name) KEY(name) VALUES ('Подтверждена');

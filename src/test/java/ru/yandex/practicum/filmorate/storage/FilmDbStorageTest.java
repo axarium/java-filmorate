@@ -8,8 +8,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.service.MpaService;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.mapper.FilmRowMapper;
+import ru.yandex.practicum.filmorate.storage.mapper.MpaRowMapper;
+import ru.yandex.practicum.filmorate.storage.mpa.MpaDbStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -20,7 +23,7 @@ import static org.assertj.core.api.Assertions.*;
 @JdbcTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@Import({FilmDbStorage.class, FilmRowMapper.class})
+@Import({FilmDbStorage.class, FilmRowMapper.class, MpaService.class, MpaDbStorage.class, MpaRowMapper.class})
 public class FilmDbStorageTest {
     private final FilmDbStorage filmDbStorage;
 

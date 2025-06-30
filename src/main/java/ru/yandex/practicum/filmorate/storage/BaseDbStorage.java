@@ -9,8 +9,8 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class BaseDbStorage<T> {
@@ -32,6 +32,37 @@ public class BaseDbStorage<T> {
 
     protected <E> List<E> getSimpleList(String query, Class<E> type, Object... params) {
         return jdbc.queryForList(query, type, params);
+    }
+
+    protected void queryWithInCondition(
+            String queryTemplate,
+            Collection<Long> ids,
+            ResultSetHandler handler
+    ) {
+        if (ids == null || ids.isEmpty()) {
+            return;
+        }
+
+        String placeholders = ids.stream().map(id -> "?").collect(Collectors.joining(","));
+        String query = String.format(queryTemplate, placeholders);
+        List<Object> args = new ArrayList<>(ids);
+
+        jdbc.query(
+                connection -> {
+                    PreparedStatement ps = connection.prepareStatement(query);
+
+                    for (int i = 0; i < args.size(); i++) {
+                        ps.setObject(i + 1, args.get(i));
+                    }
+
+                    return ps;
+                },
+                rs -> {
+                    while (rs.next()) {
+                        handler.handle(rs);
+                    }
+                }
+        );
     }
 
     protected Long insertWithGeneratedKey(String query, Object... params) {
